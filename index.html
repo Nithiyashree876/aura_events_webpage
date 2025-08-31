@@ -1,177 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Aura Eventworks</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: url('bg 2.webp') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      min-height: 100vh;
-    }
-    header {
-      background: rgba(44, 62, 80, 0.7);
-      text-align: center;
-      padding: 40px 20px 20px 20px;
-      border-bottom: 2px solid #fff;
-    }
-    header h1 {
-      font-size: 3em;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      color: #ffd700;
-      text-shadow: 2px 2px 8px #222;
-    }
-    header p {
-      font-size: 1.3em;
-      font-style: italic;
-      margin-bottom: 10px;
-      color: #fff;
-      text-shadow: 1px 1px 6px #222;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      background: rgba(52, 152, 219, 0.7);
-      padding: 15px 0;
-      font-size: 1.2em;
-      border-bottom: 2px solid #fff;
-    }
-    nav a {
-      color: #ffd700;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #fff;
-      text-shadow: 0 0 8px #ffd700;
-    }
-    section {
-      background: rgba(0,0,0,0.6);
-      margin: 30px auto;
-      padding: 30px 30px 20px 30px;
-      max-width: 900px;
-      border-radius: 18px;
-      box-shadow: 0 4px 24px #222;
-    }
-    h2 {
-      color: #ffd700;
-      text-shadow: 1px 1px 6px #222;
-      margin-bottom: 15px;
-    }
-    ul, table {
-      font-size: 1.1em;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      margin-bottom: 15px;
-    }
-    th, td {
-      border: 1px solid #ffd700;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background: rgba(44, 62, 80, 0.8);
-      color: #ffd700;
-    }
-    img {
-      margin: 15px 10px 0 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px #222;
-      border: 2px solid #ffd700;
-    }
-    footer {
-      background: rgba(44, 62, 80, 0.7);
-      text-align: center;
-      padding: 18px;
-      font-size: 1.2em;
-      color: #ffd700;
-      border-top: 2px solid #fff;
-      letter-spacing: 1px;
-      margin-top: 40px;
-    }
-    @media (max-width: 700px) {
-      section { padding: 15px; }
-      header h1 { font-size: 2em; }
-      nav { font-size: 1em; gap: 10px; }
-      img { width: 100%; height: auto; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Eventworks</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background: #f4f4f4;
+}
+h1, h2 {
+text-align: center;
+margin: 15px 0;
+}
+.navbar {
+display: flex;
+justify-content: center;
+background: #222;
+}
+.navbar button {
+padding: 12px 25px;
+border: none;
+background: #222;
+color: white;
+font-size: 16px;
+cursor: pointer;
+transition: 0.3s;
+}
+.navbar button.active, .navbar button:hover {
+background: #d14aebe5;
+}
+.section {display: none;}
+.section.active {display: block;}
+
+.tabs {
+display: flex;
+background: #222;
+margin-top: 10px;
+}
+.tabs button {
+flex: 1;
+padding: 14px;
+cursor: pointer;
+background: #222;
+color: white;
+border: none;
+}
+.tabs button:hover {background: #444;}
+.tabs button.active {background: #ce15f3;}
+
+.content {
+display: none;
+padding: 20px;
+background: white;
+min-height: 400px;
+}
+.content.active {display: block;}
+
+.events {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+padding: 20px;
+}
+.card {
+background: #fff;
+border-radius: 10px;
+padding: 15px;
+text-align: center;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.card img {
+width: 100%;
+height: 220px;
+object-fit: cover;
+border-radius: 8px;
+}
+.card h3 {margin: 10px 0;}
+.card p {color: #555; margin: 5px 0;}
+.btn {
+background: #bf16ee;
+color: white;
+padding: 8px 15px;
+border: none;
+cursor: pointer;
+border-radius: 5px;
+margin-top: 10px;
+}
+.btn:hover {background: #b430cc;}
+
+.result {
+margin-top: 10px;
+font-weight: bold;
+color: green;
+text-align:center;
+}
+
+.container {
+display: none;
+max-width: 450px;
+margin: 30px auto;
+background: white;
+padding: 25px;
+border-radius: 12px;
+box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+input, select {
+width: 100%;
+padding: 10px;
+margin: 8px 0;
+border: 1px solid #ccc;
+border-radius: 6px;
+}
+button.calc-btn {
+background: #b310d0;
+color: white;
+border: none;
+padding: 10px;
+border-radius: 6px;
+cursor: pointer;
+margin-top: 10px;
+width: 100%;
+}
+.calc-btn:hover {background:#c834d5;}
+
+.result-box {
+margin-top: 15px;
+font-weight: bold;
+text-align: center;
+font-size: 18px;
+color: #333;
+}
+</style>
 </head>
 <body>
+<h1>🎉 AURA EVENTWORKS 🎉</h1>
 
-  <header>
-    <h1>Aura Eventworks</h1>
-    <p>“Behind every successful event is a team that dared to dream big.”</p>
-  </header>
+<div class="navbar">
+<button onclick="openSection('events')" class="active">Events</button>
+<button onclick="openSection('tools')">Tools</button>
+</div>
 
-  <nav>
-    <a href="#about">About</a>
-    <a href="#instructions">Instructions</a>
-    <a href="#schedule">Schedule</a>
-    <a href="#places">Event Places</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<!-- Event Section -->
+<div id="events" class="section active">
+<h2>📅 Upcoming Events</h2>
+<div class="tabs">
+<button class="tablink active" onclick="openTab(event,'concert')">Concerts</button>
+<button class="tablink" onclick="openTab(event,'wedding')">Weddings</button>
+<button class="tablink" onclick="openTab(event,'conference')">Conferences</button>
+<button class="tablink" onclick="openTab(event,'party')">Parties</button>
+</div>
 
-  <section id="about">
-    <h2>About the Event</h2>
-    <p>Aura Eventworks is a one-day celebration featuring music, games, competitions, and food. Open to all students and guests!</p>
-  </section>
+<div id="concert" class="content active">
+<div class="events">
+<div class="card">
+<img src="ex5 img 1.jpg" alt="Concert">
+<h3>Rock Music Concert</h3>
+<p>Price: ₹1500 per ticket</p>
+<button class="btn" onclick="bookEvent('Rock Music Concert')">Book Now</button>
+</div>
+<div class="card">
+<img src="ex5 img2.avif" alt="Concert">
+<h3>Jazz Night</h3>
+<p>Price: ₹1200 per ticket</p>
+<button class="btn" onclick="bookEvent('Jazz Night')">Book Now</button>
+</div>
+</div>
+</div>
 
-  <section id="instructions">
-    <h2>Event Instructions</h2>
-    <ul>
-      <li>Bring your college ID for entry.</li>
-      <li>Be on time for each activity.</li>
-      <li>Respect others and enjoy responsibly.</li>
-      <li>Keep the area clean and safe.</li>
-    </ul>
-  </section>
+<div id="wedding" class="content">
+<div class="events">
+<div class="card">
+<img src="ex5 img 3.jpg" alt="Wedding">
+<h3>Royal Wedding Setup</h3>
+<p>Price: ₹50,000</p>
+<button class="btn" onclick="bookEvent('Royal Wedding Setup')">Book Now</button>
+</div>
+<div class="card">
+<img src="ex5 img 4.webp" alt="Wedding">
+<h3>Beachside Wedding</h3>
+<p>Price: ₹75,000</p>
+<button class="btn" onclick="bookEvent('Beachside Wedding')">Book Now</button>
+</div>
+</div>
+</div>
 
-  <section id="schedule">
-    <h2>Event Schedule</h2>
-    <table>
-      <tr><th>Time</th><th>Activity</th><th>Venue</th></tr>
-      <tr><td>10:00 AM</td><td>Opening Ceremony</td><td>Main Stage</td></tr>
-      <tr><td>11:30 AM</td><td>Dance Competition</td><td>Auditorium</td></tr>
-      <tr><td>2:00 PM</td><td>Treasure Hunt</td><td>Campus Ground</td></tr>
-      <tr><td>4:00 PM</td><td>Live Music</td><td>Open Lawn</td></tr>
-    </table>
-  </section>
+<div id="conference" class="content">
+<div class="events">
+<div class="card">
+<img src="ex5 img 5.jpg" alt="Conference">
+<h3>Business Conference</h3>
+<p>Price: ₹20,000</p>
+<button class="btn" onclick="bookEvent('Business Conference')">Book Now</button>
+</div>
+<div class="card">
+<img src="ex5 img 6.png" alt="Conference">
+<h3>Tech Meetup</h3>
+<p>Price: ₹15,000</p>
+<button class="btn" onclick="bookEvent('Tech Meetup')">Book Now</button>
+</div>
+</div>
+</div>
 
-  <section id="places">
-    <h2>Event Places</h2>
-    <p>Fun events will take place at the following venues:</p>
-    <ul>
-      <li><strong>Main Stage</strong> – Ceremonies</li>
-      <li><strong>Auditorium</strong> – Performances</li>
-      <li><strong>Campus Ground</strong> – Games</li>
-      <li><strong>Open Lawn</strong> – Food & Music</li>
-    </ul>
-    <img src="bg 1.jfif" alt="Main Stage" width="600" height="300" />
-    <img src="ev 3.jfif" alt="Auditorium" width="600" height="300" />
-    <img src="ev 2.webp" alt="Campus Ground" width="600" height="300" />
-    <img src="ev 1.jfif" alt="Open Lawn" width="600" height="300" />
-  </section>
+<div id="party" class="content">
+<div class="events">
+<div class="card">
+<img src="ex5 img 7.jpg" alt="Party">
+<h3>Birthday Party</h3>
+<p>Price: ₹10,000</p>
+<button class="btn" onclick="bookEvent('Birthday Party')">Book Now</button>
+</div>
+<div class="card">
+<img src="ex5 img8.jpg" alt="Party">
+<h3>Corporate Party</h3>
+<p>Price: ₹25,000</p>
+<button class="btn" onclick="bookEvent('Corporate Party')">Book Now</button>
+</div>
+</div>
+</div>
+<div id="cartResult" class="result"></div>
+</div>
 
-  <section id="contact">
-    <h2>Contact Us</h2>
-    <p>📧 Email: auraeventworks@example.com</p>
-    <p>📞 Phone: +91 98765 43210</p>
-    <p><a href="#about" style="color:#ffd700;">Back to About</a></p>
-  </section>
+<!-- Tools Section -->
+<div id="tools" class="section">
+<div class="navbar">
+<button onclick="openTabProg('calc')" class="active">Calculator</button>
+<button onclick="openTabProg('bmi')">BMI</button>
+<button onclick="openTabProg('currency')">Currency</button>
+<button onclick="openTabProg('emi')">Event EMI</button>
+</div>
 
-  <footer>
-    <p><b>“Together we planned, Together we celebrated, Together we Thank You!”</b></p>
-  </footer>
+<div id="calc" class="container" style="display:block;">
+<h2>Calculator</h2>
+<input type="number" id="num1" placeholder="Enter first number">
+<input type="number" id="num2" placeholder="Enter second number">
+<select id="operation">
+<option value="add">Add (+)</option>
+<option value="sub">Subtract (-)</option>
+<option value="mul">Multiply (×)</option>
+<option value="div">Divide (÷)</option>
+</select>
+<button class="calc-btn" onclick="calculate()">Calculate</button>
+<div class="result-box" id="calcResult"></div>
+</div>
 
+<div id="bmi" class="container">
+<h2>BMI Calculator</h2>
+<input type="number" id="weight" placeholder="Enter weight (kg)">
+<input type="number" id="height" placeholder="Enter height (m)">
+<button class="calc-btn" onclick="calculateBMI()">Calculate BMI</button>
+<div class="result-box" id="bmiResult"></div>
+</div>
+
+<div id="currency" class="container">
+<h2>Currency Converter</h2>
+<input type="number" id="amount" placeholder="Enter amount">
+<select id="fromCurrency">
+<option value="INR">INR</option>
+<option value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="GBP">GBP</option>
+</select>
+<select id="toCurrency">
+<option value="INR">INR</option>
+<option value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="GBP">GBP</option>
+</select>
+<button class="calc-btn" onclick="convertCurrency()">Convert</button>
+<div class="result-box" id="currencyResult"></div>
+</div>
+
+<div id="emi" class="container">
+<h2>Event EMI Calculator</h2>
+<input type="number" id="loan" placeholder="Event Cost (₹)">
+<input type="number" id="rate" placeholder="Annual Interest Rate (%)">
+<input type="number" id="tenure" placeholder="Tenure (Years)">
+<button class="calc-btn" onclick="calculateEMI()">Calculate EMI</button>
+<div class="result-box" id="emiResult"></div>
+</div>
+</div>
+
+<script>
+function openSection(id) {
+document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.navbar button').forEach(b => b.classList.remove('active'));
+event.target.classList.add('active');
+}
+function openTab(evt, id) {
+document.querySelectorAll(".content").forEach(c => c.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.querySelectorAll(".tablink").forEach(t => t.classList.remove("active"));
+evt.currentTarget.classList.add("active");
+}
+function bookEvent(item) {
+document.getElementById("cartResult").innerHTML = item + " booking confirmed 🎟️";
+}
+function openTabProg(tabId) {
+document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
+document.getElementById(tabId).style.display = 'block';
+event.target.parentElement.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+event.target.classList.add("active");
+}
+function calculate() {
+let n1 = parseFloat(document.getElementById('num1').value);
+let n2 = parseFloat(document.getElementById('num2').value);
+let op = document.getElementById('operation').value;
+let result = 0;
+if (op === 'add') result = n1 + n2;
+else if (op === 'sub') result = n1 - n2;
+else if (op === 'mul') result = n1 * n2;
+else if (op === 'div') result = n2 !== 0 ? n1 / n2 : "Error (Divide by 0)";
+document.getElementById('calcResult').innerText = "Result: " + result;
+}
+function calculateBMI() {
+let w = parseFloat(document.getElementById('weight').value);
+let h = parseFloat(document.getElementById('height').value);
+let bmi = (w / (h * h)).toFixed(2);
+let status = "";
+if (bmi < 18.5) status = "Underweight";
+else if (bmi < 25) status = "Normal";
+else if (bmi < 30) status = "Overweight";
+else status = "Obese";
+document.getElementById('bmiResult').innerText = `BMI: ${bmi} (${status})`;
+}
+const rates = {
+"INR": { "USD": 0.012, "EUR": 0.011, "GBP": 0.0095 },
+"USD": { "INR": 84, "EUR": 0.92, "GBP": 0.79 },
+"EUR": { "INR": 91, "USD": 1.09, "GBP": 0.86 },
+"GBP": { "INR": 106, "USD": 1.26, "EUR": 1.16 }
+};
+function convertCurrency() {
+let amt = parseFloat(document.getElementById('amount').value);
+let from = document.getElementById('fromCurrency').value;
+let to = document.getElementById('toCurrency').value;
+if (from === to) {
+document.getElementById('currencyResult').innerText = `Converted Amount: ${amt} ${to}`;
+return;
+}
+let result = amt * rates[from][to];
+document.getElementById('currencyResult').innerText = `Converted Amount: ${result.toFixed(2)} ${to}`;
+}
+function calculateEMI() {
+let P = parseFloat(document.getElementById('loan').value);
+let R = parseFloat(document.getElementById('rate').value) / 12 / 100;
+let N = parseInt(document.getElementById('tenure').value) * 12;
+let emi = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N) - 1);
+document.getElementById('emiResult').innerText = `Monthly EMI: ₹${emi.toFixed(2)}`;
+}
+</script>
 </body>
+</html>
