@@ -1,356 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aura Eventworks</title>
+<title>Aura Event Works</title>
 <style>
-body {
-font-family: Arial, sans-serif;
-margin: 0;
-padding: 0;
-background: #f4f4f4;
+body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    background: #f8f9fa; 
 }
-h1, h2 {
-text-align: center;
-margin: 15px 0;
+.box { 
+    display: inline-block; 
+    padding: 20px; 
+    margin: 10px; 
+    border-radius: 10px; 
+    color: #fff; 
+    font-weight: bold; 
+    min-width: 200px;
 }
-.navbar {
-display: flex;
-justify-content: center;
-background: #222;
+.venue { background: #0d47a1; }
+.decoration { background: #2e7d32; }
+.food { background: #f57c00; }
+.entertainment { background: #6a1b9a; }
+.misc { background: #ad1457; }
+button {
+    background: #1565c0;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
-.navbar button {
-padding: 12px 25px;
-border: none;
-background: #222;
-color: white;
-font-size: 16px;
-cursor: pointer;
-transition: 0.3s;
+button:hover {
+    background: #0b3c91;
 }
-.navbar button.active, .navbar button:hover {
-background: #d14aebe5;
-}
-.section {display: none;}
-.section.active {display: block;}
-
-.tabs {
-display: flex;
-background: #222;
-margin-top: 10px;
-}
-.tabs button {
-flex: 1;
-padding: 14px;
-cursor: pointer;
-background: #222;
-color: white;
-border: none;
-}
-.tabs button:hover {background: #444;}
-.tabs button.active {background: #ce15f3;}
-
-.content {
-display: none;
-padding: 20px;
-background: white;
-min-height: 400px;
-}
-.content.active {display: block;}
-
-.events {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-gap: 20px;
-padding: 20px;
-}
-.card {
-background: #fff;
-border-radius: 10px;
-padding: 15px;
-text-align: center;
-box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-.card img {
-width: 100%;
-height: 220px;
-object-fit: cover;
-border-radius: 8px;
-}
-.card h3 {margin: 10px 0;}
-.card p {color: #555; margin: 5px 0;}
-.btn {
-background: #bf16ee;
-color: white;
-padding: 8px 15px;
-border: none;
-cursor: pointer;
-border-radius: 5px;
-margin-top: 10px;
-}
-.btn:hover {background: #b430cc;}
-
-.result {
-margin-top: 10px;
-font-weight: bold;
-color: green;
-text-align:center;
-}
-
-.container {
-display: none;
-max-width: 450px;
-margin: 30px auto;
-background: white;
-padding: 25px;
-border-radius: 12px;
-box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-}
-input, select {
-width: 100%;
-padding: 10px;
-margin: 8px 0;
-border: 1px solid #ccc;
-border-radius: 6px;
-}
-button.calc-btn {
-background: #b310d0;
-color: white;
-border: none;
-padding: 10px;
-border-radius: 6px;
-cursor: pointer;
-margin-top: 10px;
-width: 100%;
-}
-.calc-btn:hover {background:#c834d5;}
-
-.result-box {
-margin-top: 15px;
-font-weight: bold;
-text-align: center;
-font-size: 18px;
-color: #333;
+input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
 }
 </style>
 </head>
+
 <body>
-<h1>🎉 AURA EVENTWORKS 🎉</h1>
+<h1>Aura Event Works</h1>
+<p>Enter the Total Event Budget</p>
+<input type="number" id="totalAmount" value="50000"><br><br>
 
-<div class="navbar">
-<button onclick="openSection('events')" class="active">Events</button>
-<button onclick="openSection('tools')">Tools</button>
-</div>
+<p>Set Your Budget Allocation (in %)</p>
+Venue(%) <input type="number" id="venuePercent" value="30">
+Decoration(%) <input type="number" id="decorPercent" value="20">
+Food(%) <input type="number" id="foodPercent" value="25">
+Entertainment(%) <input type="number" id="entertainPercent" value="15">
+Miscellaneous(%) <input type="number" id="miscPercent" value="10"><br><br>
 
-<!-- Event Section -->
-<div id="events" class="section active">
-<h2>📅 Upcoming Events</h2>
-<div class="tabs">
-<button class="tablink active" onclick="openTab(event,'concert')">Concerts</button>
-<button class="tablink" onclick="openTab(event,'wedding')">Weddings</button>
-<button class="tablink" onclick="openTab(event,'conference')">Conferences</button>
-<button class="tablink" onclick="openTab(event,'party')">Parties</button>
-</div>
+<button onclick="calculateEventBudget()">Evaluate My Event Budget</button>
 
-<div id="concert" class="content active">
-<div class="events">
-<div class="card">
-<img src="ex5 img 1.jpg" alt="Concert">
-<h3>Rock Music Concert</h3>
-<p>Price: ₹1500 per ticket</p>
-<button class="btn" onclick="bookEvent('Rock Music Concert')">Book Now</button>
-</div>
-<div class="card">
-<img src="ex5 img2.avif" alt="Concert">
-<h3>Jazz Night</h3>
-<p>Price: ₹1200 per ticket</p>
-<button class="btn" onclick="bookEvent('Jazz Night')">Book Now</button>
-</div>
-</div>
-</div>
-
-<div id="wedding" class="content">
-<div class="events">
-<div class="card">
-<img src="ex5 img 3.jpg" alt="Wedding">
-<h3>Royal Wedding Setup</h3>
-<p>Price: ₹50,000</p>
-<button class="btn" onclick="bookEvent('Royal Wedding Setup')">Book Now</button>
-</div>
-<div class="card">
-<img src="ex5 img 4.webp" alt="Wedding">
-<h3>Beachside Wedding</h3>
-<p>Price: ₹75,000</p>
-<button class="btn" onclick="bookEvent('Beachside Wedding')">Book Now</button>
-</div>
-</div>
-</div>
-
-<div id="conference" class="content">
-<div class="events">
-<div class="card">
-<img src="ex5 img 5.jpg" alt="Conference">
-<h3>Business Conference</h3>
-<p>Price: ₹20,000</p>
-<button class="btn" onclick="bookEvent('Business Conference')">Book Now</button>
-</div>
-<div class="card">
-<img src="ex5 img 6.png" alt="Conference">
-<h3>Tech Meetup</h3>
-<p>Price: ₹15,000</p>
-<button class="btn" onclick="bookEvent('Tech Meetup')">Book Now</button>
-</div>
-</div>
-</div>
-
-<div id="party" class="content">
-<div class="events">
-<div class="card">
-<img src="ex5 img 7.jpg" alt="Party">
-<h3>Birthday Party</h3>
-<p>Price: ₹10,000</p>
-<button class="btn" onclick="bookEvent('Birthday Party')">Book Now</button>
-</div>
-<div class="card">
-<img src="ex5 img8.jpg" alt="Party">
-<h3>Corporate Party</h3>
-<p>Price: ₹25,000</p>
-<button class="btn" onclick="bookEvent('Corporate Party')">Book Now</button>
-</div>
-</div>
-</div>
-<div id="cartResult" class="result"></div>
-</div>
-
-<!-- Tools Section -->
-<div id="tools" class="section">
-<div class="navbar">
-<button onclick="openTabProg('calc')" class="active">Calculator</button>
-<button onclick="openTabProg('bmi')">BMI</button>
-<button onclick="openTabProg('currency')">Currency</button>
-<button onclick="openTabProg('emi')">Event EMI</button>
-</div>
-
-<div id="calc" class="container" style="display:block;">
-<h2>Calculator</h2>
-<input type="number" id="num1" placeholder="Enter first number">
-<input type="number" id="num2" placeholder="Enter second number">
-<select id="operation">
-<option value="add">Add (+)</option>
-<option value="sub">Subtract (-)</option>
-<option value="mul">Multiply (×)</option>
-<option value="div">Divide (÷)</option>
-</select>
-<button class="calc-btn" onclick="calculate()">Calculate</button>
-<div class="result-box" id="calcResult"></div>
-</div>
-
-<div id="bmi" class="container">
-<h2>BMI Calculator</h2>
-<input type="number" id="weight" placeholder="Enter weight (kg)">
-<input type="number" id="height" placeholder="Enter height (m)">
-<button class="calc-btn" onclick="calculateBMI()">Calculate BMI</button>
-<div class="result-box" id="bmiResult"></div>
-</div>
-
-<div id="currency" class="container">
-<h2>Currency Converter</h2>
-<input type="number" id="amount" placeholder="Enter amount">
-<select id="fromCurrency">
-<option value="INR">INR</option>
-<option value="USD">USD</option>
-<option value="EUR">EUR</option>
-<option value="GBP">GBP</option>
-</select>
-<select id="toCurrency">
-<option value="INR">INR</option>
-<option value="USD">USD</option>
-<option value="EUR">EUR</option>
-<option value="GBP">GBP</option>
-</select>
-<button class="calc-btn" onclick="convertCurrency()">Convert</button>
-<div class="result-box" id="currencyResult"></div>
-</div>
-
-<div id="emi" class="container">
-<h2>Event EMI Calculator</h2>
-<input type="number" id="loan" placeholder="Event Cost (₹)">
-<input type="number" id="rate" placeholder="Annual Interest Rate (%)">
-<input type="number" id="tenure" placeholder="Tenure (Years)">
-<button class="calc-btn" onclick="calculateEMI()">Calculate EMI</button>
-<div class="result-box" id="emiResult"></div>
-</div>
+<div>
+    <div class="box venue" id="venueBox">Venue Rs.0.00</div>
+    <div class="box decoration" id="decorBox">Decoration Rs.0.00</div>
+    <div class="box food" id="foodBox">Food Rs.0.00</div>
+    <div class="box entertainment" id="entertainBox">Entertainment Rs.0.00</div>
+    <div class="box misc" id="miscBox">Miscellaneous Rs.0.00</div>
 </div>
 
 <script>
-function openSection(id) {
-document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('.navbar button').forEach(b => b.classList.remove('active'));
-event.target.classList.add('active');
-}
-function openTab(evt, id) {
-document.querySelectorAll(".content").forEach(c => c.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-document.querySelectorAll(".tablink").forEach(t => t.classList.remove("active"));
-evt.currentTarget.classList.add("active");
-}
-function bookEvent(item) {
-document.getElementById("cartResult").innerHTML = item + " booking confirmed 🎟️";
-}
-function openTabProg(tabId) {
-document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
-document.getElementById(tabId).style.display = 'block';
-event.target.parentElement.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-event.target.classList.add("active");
-}
-function calculate() {
-let n1 = parseFloat(document.getElementById('num1').value);
-let n2 = parseFloat(document.getElementById('num2').value);
-let op = document.getElementById('operation').value;
-let result = 0;
-if (op === 'add') result = n1 + n2;
-else if (op === 'sub') result = n1 - n2;
-else if (op === 'mul') result = n1 * n2;
-else if (op === 'div') result = n2 !== 0 ? n1 / n2 : "Error (Divide by 0)";
-document.getElementById('calcResult').innerText = "Result: " + result;
-}
-function calculateBMI() {
-let w = parseFloat(document.getElementById('weight').value);
-let h = parseFloat(document.getElementById('height').value);
-let bmi = (w / (h * h)).toFixed(2);
-let status = "";
-if (bmi < 18.5) status = "Underweight";
-else if (bmi < 25) status = "Normal";
-else if (bmi < 30) status = "Overweight";
-else status = "Obese";
-document.getElementById('bmiResult').innerText = `BMI: ${bmi} (${status})`;
-}
-const rates = {
-"INR": { "USD": 0.012, "EUR": 0.011, "GBP": 0.0095 },
-"USD": { "INR": 84, "EUR": 0.92, "GBP": 0.79 },
-"EUR": { "INR": 91, "USD": 1.09, "GBP": 0.86 },
-"GBP": { "INR": 106, "USD": 1.26, "EUR": 1.16 }
-};
-function convertCurrency() {
-let amt = parseFloat(document.getElementById('amount').value);
-let from = document.getElementById('fromCurrency').value;
-let to = document.getElementById('toCurrency').value;
-if (from === to) {
-document.getElementById('currencyResult').innerText = `Converted Amount: ${amt} ${to}`;
-return;
-}
-let result = amt * rates[from][to];
-document.getElementById('currencyResult').innerText = `Converted Amount: ${result.toFixed(2)} ${to}`;
-}
-function calculateEMI() {
-let P = parseFloat(document.getElementById('loan').value);
-let R = parseFloat(document.getElementById('rate').value) / 12 / 100;
-let N = parseInt(document.getElementById('tenure').value) * 12;
-let emi = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N) - 1);
-document.getElementById('emiResult').innerText = `Monthly EMI: ₹${emi.toFixed(2)}`;
+function calculateEventBudget() {
+    let total = parseFloat(document.getElementById("totalAmount").value);
+    let venueP = parseFloat(document.getElementById("venuePercent").value);
+    let decorP = parseFloat(document.getElementById("decorPercent").value);
+    let foodP = parseFloat(document.getElementById("foodPercent").value);
+    let entertainP = parseFloat(document.getElementById("entertainPercent").value);
+    let miscP = parseFloat(document.getElementById("miscPercent").value);
+
+    // Calculate amounts
+    let venueAmt = (total * venueP) / 100;
+    let decorAmt = (total * decorP) / 100;
+    let foodAmt = (total * foodP) / 100;
+    let entertainAmt = (total * entertainP) / 100;
+    let miscAmt = (total * miscP) / 100;
+
+    // Display results
+    document.getElementById("venueBox").innerHTML = "Venue Rs." + venueAmt.toFixed(2);
+    document.getElementById("decorBox").innerHTML = "Decoration Rs." + decorAmt.toFixed(2);
+    document.getElementById("foodBox").innerHTML = "Food Rs." + foodAmt.toFixed(2);
+    document.getElementById("entertainBox").innerHTML = "Entertainment Rs." + entertainAmt.toFixed(2);
+    document.getElementById("miscBox").innerHTML = "Miscellaneous Rs." + miscAmt.toFixed(2);
 }
 </script>
+
+<p style="margin-top:30px; color:gray;">
 </body>
 </html>
