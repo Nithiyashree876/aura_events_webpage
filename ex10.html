@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Event Works</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body { background-color: #f5f8ff; font-family: 'Poppins', sans-serif; }
+.navbar { background: linear-gradient(90deg, #007bff, #00b4d8); }
+.navbar-brand, .nav-link, .navbar-text { color: white !important; font-weight: 500; }
+
+.card { border: none; border-radius: 15px; transition: transform .3s ease, box-shadow .3s ease; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+.card img { height: 220px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px; }
+
+footer { text-align: center; margin: 30px 0; color: #888; font-size: 14px; }
+.btn-outline-primary { border-color: #007bff; color: #007bff; }
+.btn-outline-primary:hover { background-color: #007bff; color: white; }
+</style>
+</head>
+<body>
+<div id="main"></div>
+
+<script>
+// ---- LOGIN DATA ----
+const admin = { username: "admin", password: "admin", role: "admin" };
+const users = [{ username: "user", password: "1234", role: "user" }];
+
+// ---- EVENT SETUP (with your images) ----
+let events = [
+  // Wedding Events
+  { name: "Wedding Celebration 1", price: 22000, cat: "Wedding", image: "ex10 img 3.jpg" },
+  { name: "Wedding Celebration 2", price: 23000, cat: "Wedding", image: "ex10 img 4.jpg" },
+  { name: "Wedding Celebration 3", price: 24000, cat: "Wedding", image: "ex10 img 5.webp" },
+
+  // Corporate Events
+  { name: "Corporate Meetup 1", price: 15000, cat: "Corporate", image: "ex 10 c 1.jpg" },
+  { name: "Corporate Meetup 2", price: 15800, cat: "Corporate", image: "ex10 c2.jpg" },
+  { name: "Corporate Meetup 3", price: 16600, cat: "Corporate", image: "ex10 c3.jpg" },
+  { name: "Corporate Meetup 4", price: 17400, cat: "Corporate", image: "ex10 c4.jpg" },
+  { name: "Corporate Meetup 5", price: 18200, cat: "Corporate", image: "ex10 c5.jpg" },
+
+  // Birthday Events
+  { name: "Birthday Party 1", price: 10000, cat: "Birthday", image: "ex10 b1.jpg" },
+  { name: "Birthday Party 2", price: 10500, cat: "Birthday", image: "ex10 b2.jpg" },
+  { name: "Birthday Party 3", price: 11000, cat: "Birthday", image: "ex10 b3.jpg" },
+  { name: "Birthday Party 4", price: 11500, cat: "Birthday", image: "ex10 b4.jpg" },
+
+  // Concert Events
+  { name: "Concert Event 1", price: 25000, cat: "Concert", image: "ex10 co 1.jpg" },
+  { name: "Concert Event 2", price: 26200, cat: "Concert", image: "ex10 co 2.jpg" },
+  { name: "Concert Event 3", price: 27400, cat: "Concert", image: "ex10 co 3.jpg" },
+  { name: "Concert Event 4", price: 28600, cat: "Concert", image: "ex10 co 4.jpg" },
+  { name: "Concert Event 5", price: 29800, cat: "Concert", image: "ex10 co 5.jpg" }
+];
+
+let cart = JSON.parse(localStorage.getItem("eventCart")) || [];
+
+// ---- LOGIN PAGE ----
+function showLogin() {
+document.getElementById("main").innerHTML = `
+<div class='login-box card p-4 shadow mt-5 mx-auto' style='max-width:400px'>
+<h3 class='text-center text-primary mb-3'>🎉 Aura Event Works </h3>
+<input type='text' id='username' class='form-control mb-2' placeholder='Username'>
+<input type='password' id='password' class='form-control mb-3' placeholder='Password'>
+<button class='btn btn-primary w-100' onclick='login()'>Login</button>
+</div>`;
+}
+
+function login() {
+const u = username.value.trim(), p = password.value.trim();
+if (u === admin.username && p === admin.password) showAdminPage();
+else if (users.some(x => x.username === u && x.password === p)) showUserPage();
+else alert("❌ Invalid login details!");
+}
+
+// ======================================================
+// ADMIN PAGE
+// ======================================================
+function showAdminPage() {
+document.getElementById("main").innerHTML = `
+<nav class="navbar navbar-expand-lg">
+<div class="container-fluid">
+<a class="navbar-brand">Admin Dashboard 🧑‍💼</a>
+<button class="btn btn-outline-light" onclick="logout()">Logout</button>
+</div>
+</nav>
+<div class="container mt-4">
+<h4>Add New Event</h4>
+<div class="card p-3 mb-4 shadow-sm">
+<input id="ename" class="form-control mb-2" placeholder="Event Name">
+<input id="eprice" type="number" class="form-control mb-2" placeholder="Price (₹)">
+<select id="ecat" class="form-select mb-2">
+<option value="">Select Category</option>
+<option>Wedding</option><option>Corporate</option><option>Birthday</option><option>Concert</option>
+</select>
+<input id="eimg" class="form-control mb-2" placeholder="Image filename (e.g. ex10 img 6.jpg)">
+<button class="btn btn-success w-100" onclick="addEvent()">Add Event</button>
+</div>
+<h5>Available Events</h5>
+<div class="row" id="adminEvents"></div>
+</div>`;
+renderAdminEvents();
+}
+
+function addEvent() {
+const name = ename.value.trim(), price = eprice.value, cat = ecat.value, img = eimg.value.trim();
+if (!name || !price || !cat || !img) return alert("Please fill all fields!");
+events.push({ name, price, cat, image: img });
+renderAdminEvents();
+ename.value = eprice.value = ecat.value = eimg.value = "";
+}
+
+function renderAdminEvents() {
+const div = document.getElementById("adminEvents");
+div.innerHTML = events.map((e, i) => `
+<div class="col-md-3 mb-3">
+<div class="card shadow-sm">
+<img src="${e.image}" class="card-img-top">
+<div class="card-body text-center">
+<h6>${e.name}</h6>
+<p>${e.cat}</p>
+<p class="text-success fw-bold">₹${e.price}</p>
+<button class="btn btn-danger btn-sm" onclick="deleteEvent(${i})">Delete</button>
+</div>
+</div>
+</div>`).join("");
+}
+
+function deleteEvent(i) {
+if (confirm("Delete this event?")) {
+events.splice(i, 1);
+renderAdminEvents();
+}
+}
+
+// ======================================================
+// USER PAGE
+// ======================================================
+function showUserPage() {
+document.getElementById("main").innerHTML = `
+<nav class="navbar navbar-expand-lg">
+<div class="container-fluid">
+<a class="navbar-brand">🎭 Aura Event Works</a>
+<form class="d-flex" onsubmit="event.preventDefault();searchEvents()">
+<input class="form-control me-2" id="search" type="search" placeholder="Search events...">
+<button class="btn btn-light">Search</button>
+</form>
+<div>
+<button class="btn btn-warning me-2" onclick="viewCart()">Bookings (${cart.length})</button>
+<button class="btn btn-outline-light" onclick="logout()">Logout</button>
+</div>
+</div>
+</nav>
+<div class="container mt-4">
+<div class="d-flex flex-wrap gap-2 mb-3">
+<button class="btn btn-outline-primary btn-sm" onclick="filterCategory('')">All</button>
+${["Wedding","Corporate","Birthday","Concert"].map(c=>`<button class="btn btn-outline-primary btn-sm" onclick="filterCategory('${c}')">${c}</button>`).join("")}
+</div>
+<div class="row" id="eventGrid"></div>
+</div>
+<footer>© 2025 Aura Event Works</footer>`;
+renderEvents(events);
+}
+
+function renderEvents(list) {
+const grid = document.getElementById("eventGrid");
+if (!list.length) return grid.innerHTML = `<p class="text-muted">No events found.</p>`;
+grid.innerHTML = list.map((e, i) => `
+<div class="col-md-3 mb-3">
+<div class="card">
+<img src="${e.image}" class="card-img-top">
+<div class="card-body text-center">
+<h6>${e.name}</h6>
+<p>${e.cat}</p>
+<p class="text-success fw-bold">₹${e.price}</p>
+<button class="btn btn-dark btn-sm" onclick="addToCart(${i})">Book Now</button>
+</div>
+</div>
+</div>`).join("");
+}
+
+function filterCategory(cat) {
+renderEvents(cat ? events.filter(e => e.cat === cat) : events);
+}
+
+function searchEvents() {
+const val = search.value.toLowerCase();
+renderEvents(events.filter(e => e.name.toLowerCase().includes(val)));
+}
+
+// ======================================================
+// CART & CHECKOUT
+// ======================================================
+function addToCart(i) {
+cart.push(events[i]);
+localStorage.setItem("eventCart", JSON.stringify(cart));
+alert("✅ Event added to your bookings!");
+showUserPage();
+}
+
+function viewCart() {
+document.getElementById("main").innerHTML = `
+<nav class="navbar navbar-expand-lg">
+<div class="container-fluid">
+<a class="navbar-brand">🛒 Your Bookings</a>
+<button class="btn btn-outline-light" onclick="showUserPage()">Back</button>
+</div>
+</nav>
+<div class="container mt-4">
+<div class="row">${cart.map((c, i) => `
+<div class="col-md-3 mb-3">
+<div class="card">
+<img src="${c.image}" class="card-img-top">
+<div class="card-body text-center">
+<h6>${c.name}</h6>
+<p class="text-success fw-bold">₹${c.price}</p>
+<button class="btn btn-danger btn-sm" onclick="removeCart(${i})">Remove</button>
+</div>
+</div>
+</div>`).join("")}</div>
+<div class="text-center mt-3">
+<button class="btn btn-success" onclick="checkout()">Proceed to Checkout</button>
+</div>
+</div>`;
+}
+
+function removeCart(i) {
+cart.splice(i, 1);
+localStorage.setItem("eventCart", JSON.stringify(cart));
+viewCart();
+}
+
+function checkout() {
+const total = cart.reduce((a,b)=>a+Number(b.price),0);
+document.getElementById("main").innerHTML = `
+<div class="container mt-5" style="max-width:600px;">
+<h2 class="text-center mb-4">🧾 Booking Summary</h2>
+<p><b>Total Events:</b> ${cart.length}</p>
+<h4 class="text-success"><b>Total Amount:</b> ₹${total}</h4>
+<hr>
+<h5>🧍‍♀️ Customer Details</h5>
+<input id="uname" class="form-control mb-2" placeholder="Full Name">
+<input id="uaddress" class="form-control mb-2" placeholder="Address / Venue">
+<input id="uphone" class="form-control mb-3" placeholder="Contact Number">
+<h5>💳 Payment Method</h5>
+<div class="form-check">
+<input class="form-check-input" type="radio" name="pay" id="cod" value="Cash" checked>
+<label class="form-check-label" for="cod">Cash Payment</label>
+</div>
+<div class="form-check mb-3">
+<input class="form-check-input" type="radio" name="pay" id="online" value="Online">
+<label class="form-check-label" for="online">Online (UPI / Card)</label>
+</div>
+<div class="text-center">
+<button class="btn btn-primary w-100" onclick="confirmOrder()">Confirm Booking</button>
+</div>
+</div>`;
+}
+
+function confirmOrder() {
+const name = uname.value.trim(), addr = uaddress.value.trim(), phone = uphone.value.trim();
+const payment = document.querySelector('input[name="pay"]:checked').value;
+if (!name || !addr || !phone) return alert("⚠️ Please fill your details!");
+alert(`✅ Booking Confirmed!\n\n📍 Venue: ${addr}\n📞 Contact: ${phone}\n💰 Payment: ${payment}`);
+cart = [];
+localStorage.setItem("eventCart", JSON.stringify(cart));
+showUserPage();
+}
+
+function logout() {
+showLogin();
+}
+
+// Start
+showLogin();
+</script>
+</body>
+</html>
+
